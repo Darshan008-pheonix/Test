@@ -1,0 +1,22 @@
+> Write a program for performing XML based configuration for the following scenario
+   > A company has multiple employees, multiple employees are of types: 
+     ProjectManager, Software Engineer and HR, The application generates the
+     payslips of the multiple types of employees. Assume required properties
+
+
+NOTE:FOLLOW IT CONVENTIONS FOR PACKAGES,CLASSES,INTERFACES.
+
+> Write a program for performing Pure Annotation based configuration for the following  scenario
+   > A grocery application has multiple types of products: Dairy Products,
+     Vegetables, Cereals etc, The application must stores the information about 
+     different types of products.Assume required properties
+NOTE:FOLLOW IT CONVENTIONS FOR PACKAGES,CLASSES,INTERFACES.
+
+> Explain the following annotations: @Component,@ComponentScan,@Qualifier,@Autowired
+> Explain the XML Based Configuration
+> What is IOC container
+> What are the types of dependency injection
+> Write a program on Annotation based configuration-XML
+
+
+
