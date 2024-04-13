@@ -36,7 +36,7 @@ public class SecurityConfigDemo {
 	@Bean
 	public SecurityFilterChain autho(HttpSecurity h) throws Exception  {
 	h.csrf((csrf)->csrf.disable()).
-		authorizeHttpRequests((authorizeHttpRequests)->authorizeHttpRequests.requestMatchers("/index","/add").
+		authorizeHttpRequests((authorizeHttpRequests)->authorizeHttpRequests.requestMatchers("/index","/add","/autho").
 				permitAll().requestMatchers("/home").hasRole("EMP")).formLogin();
 	return h.build();
 	}

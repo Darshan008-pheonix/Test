@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.user.entity.AuthoInfo;
 import com.example.user.entity.Employee;
 import com.example.user.repo.EmployeeRepo;
+import com.example.user.service.AuthoService;
 import com.example.user.service.EmployeeService;
 import com.example.user.serviceimpln.EmployeeServiceImpln;
 
@@ -16,6 +18,9 @@ import com.example.user.serviceimpln.EmployeeServiceImpln;
 public class DemoController {
 	@Autowired
 	EmployeeService s;
+	
+	@Autowired
+	AuthoService as;
 	
 	@RequestMapping("index")
 	String api1() {
@@ -39,4 +44,37 @@ public class DemoController {
 		return s.addEmp(e);
 		
 	}
+	
+	
+	@PostMapping("autho")
+	String authoToken(@RequestBody AuthoInfo a) {
+	return as.generateToken(a.getUserName());
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
