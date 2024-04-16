@@ -1,7 +1,14 @@
 package com.example.user;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +28,9 @@ public class DemoController {
 	
 	@Autowired
 	AuthoService as;
+	
+	@Autowired
+	AuthenticationManager authenticationManager;
 	
 	@RequestMapping("index")
 	String api1() {
@@ -48,8 +58,15 @@ public class DemoController {
 	
 	@PostMapping("autho")
 	String authoToken(@RequestBody AuthoInfo a) {
-	return as.generateToken(a.getUserName());
+	Authentication token = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(a.getUserName(), a.getPassword()));
+	
+	if(token.isAuthenticated()) {
+	return as.generateToken(a.getUserName()); }
+	else {
+		throw new UsernameNotFoundException("Invalid Credentails...!!!!");
 	}
+	}
+	
 	
 	
 	

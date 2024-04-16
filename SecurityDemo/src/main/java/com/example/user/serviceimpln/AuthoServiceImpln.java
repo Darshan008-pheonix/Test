@@ -4,11 +4,14 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.example.user.service.AuthoService;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -25,7 +28,7 @@ public class AuthoServiceImpln  implements AuthoService{
 
 	private String createToken(Map<String, Object> claim, String username) {
 		return Jwts.builder().setClaims(claim).setSubject(username).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis()+18000)).signWith(generateKey(),SignatureAlgorithm.HS256).compact();
+				.setExpiration(new Date(System.currentTimeMillis()+1000*60*30)).signWith(generateKey(),SignatureAlgorithm.HS256).compact();
 	}
 
 	private Key generateKey() {
@@ -34,4 +37,51 @@ public class AuthoServiceImpln  implements AuthoService{
 		return Keys.hmacShaKeyFor(deKey);
 	}
 
+	@Override
+	public String extractUsername(String token) {
+		String username=extractClaim(token, Claims::getSubject);
+		return username;
+	}
+
+	public Date extractExpDate(String token) {
+		Date expDate=extractClaim(token, Claims::getExpiration);
+		return expDate;
+	}
+	
+	public boolean isExp(String token) {
+		System.out.println(extractExpDate(token)+" "+new Date());
+		for(int i=0;i<20;i++) {
+			System.out.println("     ");
+		}
+		return (extractExpDate(token)).after(new Date());
+	}
+	
+	@Override
+	public boolean validate(String token, UserDetails user) {
+		
+		System.out.println(user.getUsername()+" "+extractUsername(token));
+		System.out.println(isExp(token));
+		return (user.getUsername().equals(extractUsername(token)))&&isExp(token);
+		
+	}
+	
+	
+	<T> T extractClaim(String token,Function<Claims, T> claimData) {
+		Claims c=extractAll(token);
+		return claimData.apply(c);
+	}
+	
+	Claims extractAll(String token) {
+		return Jwts.parserBuilder().setSigningKey(generateKey()).build().parseClaimsJws(token).getBody();
+	}
+
 }
+
+
+
+
+
+
+
+
+
